@@ -18,7 +18,7 @@ class Solution {
         return results
     }
     
-    func hasPathSum(_ root: TreeNode?, _ sum: Int, _ arr: inout [Int]) -> Bool {
+    private func hasPathSum(_ root: TreeNode?, _ sum: Int, _ arr: inout [Int]) -> Bool {
         guard root != nil else { return false }
         let nextSum = sum - (root?.val ?? 0)
         arr.append(root?.val ?? 0)
