@@ -21,6 +21,32 @@
  */
 
 class Solution {
+    
+    class Node {
+        var children: [Node] = []
+        var value: String
+        
+        init(_ value: String) {
+            self.value = value
+        }
+        
+        func calculate() -> Int {
+            if let num = Int(value) {
+                return num
+            } else {
+                var sum = 0
+                var sign = 1
+                if value == "-" {
+                    sign = -1
+                }
+                for child in children {
+                    sum += child.calculate() * sign
+                }
+                return sum
+            }
+        }
+    }
+    
     func calculate(_ s: String) -> Int {
         var stack: [Int] = []
         let s = Array(s).map({ String($0) })
