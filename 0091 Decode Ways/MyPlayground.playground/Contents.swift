@@ -21,27 +21,64 @@
 
 class Solution {
     func numDecodings(_ s: String) -> Int {
-        var dp: [Int] = [1]
-        var prevSymb: String.Element? = nil
+        let s = s.reversed().compactMap({ Int(String($0)) })
+        var ll = 0
+        var l = 1
+        var n = 0
         
-        for c in s {
-            let val: Int = prevSymb == nil ? 0 : (prevSymb == "1") ? 1 : (prevSymb == "2" && c <= "6") ? 1 : 0
-            if c == "1" || c == "2" {
-                prevSymb = c
+        for (i, c) in s.enumerated() {
+            if c == 0 {
+                let next = i < (s.count - 1) ? s[i+1] : 10
+                if i >= (s.count - 1) || (next == 0 || next > 2) {
+                    return 0
+                } else {
+                    n = 0
+                }
             } else {
-                prevSymb = nil
+                let next = i > 0 ? s[i-1] : 10
+                if (c == 2 && next >= 7) || c > 2 {
+                    n = l
+                } else {
+                    n = ll + l
+                }
             }
-            let prev = dp.last ?? 0
-            dp.append(prev + val)
-            print(dp)
-            print(c)
-            print()
+            
+            ll = l
+            l = n
         }
         
-        return dp.last ?? 0
+        return n
+    }
+    
+    func dp(s: String, count: inout Int) {
+        if s.isEmpty {
+            count += 1
+            return
+        }
+        
+        if s[..<s.index(s.startIndex, offsetBy: 1)] != "0" {
+            dp(s: String(s[s.index(s.startIndex, offsetBy: 1)...]), count: &count)
+        }
+        
+        if s.count > 1, let n = Int(s[...s.index(s.startIndex, offsetBy: 1)]), n < 27 {
+            dp(s: String(s[s.index(s.startIndex, offsetBy: 2)...]), count: &count)
+        }
     }
 }
 
+print(Solution().numDecodings("27")) // 1
+print(Solution().numDecodings("272727")) // 1
+print(Solution().numDecodings("262626")) // 8
+print(Solution().numDecodings("272707")) // 0
 print(Solution().numDecodings("226")) // 3
 print(Solution().numDecodings("12")) // 2
 print(Solution().numDecodings("1111")) // 5
+print(Solution().numDecodings("1111111111")) // 89
+print(Solution().numDecodings("10")) // 1 => "01"
+print(Solution().numDecodings("101")) // 1
+print(Solution().numDecodings("101010")) // 1
+print(Solution().numDecodings("0")) // 0
+print(Solution().numDecodings("01")) // 0
+print(Solution().numDecodings("10001")) // 0
+print(Solution().numDecodings("00011")) // 0
+print(Solution().numDecodings("101010100100000")) // 0

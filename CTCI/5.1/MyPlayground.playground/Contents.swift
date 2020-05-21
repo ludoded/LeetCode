@@ -10,6 +10,7 @@ print(i<<2) // 4
 print(i<<3) // 8
 print(i<<10) // 1024
 print((~0)<<10)
+print(~UInt8(0))
 // n
 let c = String.init(1024, radix: 2, uppercase: true).count
 let d: Double = pow(2, Double(c)) - 1
@@ -39,16 +40,17 @@ print(s.merge(1040, 19, 2, 6))
 
 class Solution1 {
     func reverseBits(_ n: Int) -> Int {
-        let count = String.init(n, radix: 2, uppercase: true).count
+        var n = UInt(n)
+        let count = UInt(String.init(n, radix: 2, uppercase: true).count)
         let nAmountOfBits: Double = Double(count)
-        var mask = Int(pow(2, nAmountOfBits) - 1)
+        var mask = UInt(pow(2, nAmountOfBits) - 1)
         print()
         print(String.init(mask, radix: 2, uppercase: true))
         for i in 0..<count {
             mask &= ~(n & 1<<i) << count - i
         }
         
-        return mask
+        return Int(mask)
     }
 }
 
